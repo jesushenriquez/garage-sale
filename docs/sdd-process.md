@@ -141,7 +141,27 @@ docs/
 - **Numeración**: `{NNN}` es secuencial y global (001, 002, 003...). No se reinicia entre `wip/` y `done/`.
 - **Nombre**: kebab-case descriptivo (ej: `001-catalogo-mvp`, `002-busqueda-productos`).
 - **Scaffolding**: Al iniciar una feature, se crea la carpeta con los 3 archivos usando los templates base (con secciones vacías listas para llenar).
-- **Movimiento**: Una vez implementada y verificada, se mueve la carpeta completa de `wip/` a `done/`.
+- **Movimiento**: Ver sección "Cierre de feature" más abajo.
+
+## Cierre de feature
+
+### Mover specs a `done/`
+
+Una vez completada la implementación y las pruebas, se mueve la carpeta de specs de `wip/` a `done/` como **último commit en el feature branch**, antes de crear el PR. Así el move queda incluido en el PR y al mergearse todo queda atómico.
+
+**Flujo**:
+1. Implementación y pruebas completadas en el feature branch.
+2. Mover `docs/wip/{NNN}-{nombre}/ → docs/done/{NNN}-{nombre}/`.
+3. Commit: `docs: move {NNN}-{nombre} specs from wip to done`.
+4. Crear el PR (que incluye código + move de specs).
+5. Al mergear el PR, las specs quedan automáticamente en `done/`.
+
+### Correcciones post-move
+
+Si después de mover a `done/` se detecta que algo hay que cambiar (durante el PR review o pruebas adicionales):
+
+- **Cambio menor**: Hacer el fix y editar las specs directamente en `docs/done/` dentro del mismo feature branch. No hace falta moverlas de vuelta a `wip/`.
+- **Cambio mayor que invalida la spec**: Mover de vuelta a `docs/wip/`, re-hacer el proceso de aprobación, y volver a mover a `done/` cuando esté listo. Este caso debería ser excepcional.
 
 ## Templates
 
