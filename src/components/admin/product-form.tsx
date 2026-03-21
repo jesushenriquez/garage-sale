@@ -20,6 +20,8 @@ export function ProductForm({ product }: ProductFormProps) {
   const [category, setCategory] = useState(product?.category || CATEGORIES[0]);
   const [itemCondition, setItemCondition] = useState<string>(product?.item_condition || "used");
   const [deliveryMethod, setDeliveryMethod] = useState<string>(product?.delivery_method || "");
+  const [pickupAddress, setPickupAddress] = useState(product?.pickup_address || "");
+  const [pickupMapUrl, setPickupMapUrl] = useState(product?.pickup_map_url || "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -35,6 +37,8 @@ export function ProductForm({ product }: ProductFormProps) {
       category,
       item_condition: itemCondition,
       delivery_method: deliveryMethod || null,
+      pickup_address: pickupAddress || null,
+      pickup_map_url: pickupMapUrl || null,
       ...(isEditing ? { sale_status: product.sale_status } : {}),
     };
 
@@ -164,6 +168,53 @@ export function ProductForm({ product }: ProductFormProps) {
             </select>
           </div>
         </div>
+
+        {(deliveryMethod === "pickup" || deliveryMethod === "both") && (
+          <div className="space-y-4 rounded-lg border border-gray-200 p-4 bg-gray-50">
+            <p className="text-sm font-medium text-gray-700">
+              Lugar de recogida personalizado
+              <span className="font-normal text-gray-500"> (opcional, si no se configura se usa el de la tienda)</span>
+            </p>
+            <div>
+              <label htmlFor="pickup_address" className={labelClass}>Dirección de recogida</label>
+              <textarea
+                id="pickup_address"
+                value={pickupAddress}
+                onChange={(e) => setPickupAddress(e.target.value)}
+                rows={2}
+                className={inputClass}
+                placeholder="Dirección específica para este producto..."
+              />
+            </div>
+            <div>
+              <label htmlFor="pickup_map_url" className={labelClass}>URL de Google Maps (embed)</label>
+              <input
+                id="pickup_map_url"
+                type="text"
+                value={pickupMapUrl}
+                onChange={(e) => setPickupMapUrl(e.target.value)}
+                className={inputClass}
+                placeholder="https://www.google.com/maps/embed?pb=..."
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Ve a Google Maps → Compartir → Incorporar un mapa → Copia la URL del src del iframe.
+              </p>
+              {pickupMapUrl && (
+                <div className="mt-3 rounded-lg overflow-hidden border border-gray-200">
+                  <iframe
+                    src={pickupMapUrl}
+                    width="100%"
+                    height="200"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {error && <p className="text-sm text-red-600">{error}</p>}
 

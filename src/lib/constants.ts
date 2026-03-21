@@ -23,7 +23,13 @@ export const SALE_STATUSES = {
 export const DELIVERY_METHODS = {
   delivery: "Entrega a domicilio",
   pickup: "Recoger en lugar",
-  both: "Domicilio o recoger en lugar",
+  both: "A domicilio o recoger en lugar",
+} as const;
+
+export const DOCUMENT_TYPES = {
+  cedula: "Cédula de Identidad",
+  ruc: "RUC",
+  pasaporte: "Pasaporte",
 } as const;
 
 export const BANK_ACCOUNT_TYPES = {

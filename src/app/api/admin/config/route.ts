@@ -11,6 +11,14 @@ export async function PUT(request: NextRequest) {
 
   const body = await request.json();
 
+  // Validación: si hay número de documento, debe haber tipo
+  if (body.document_number && !body.document_type) {
+    return NextResponse.json(
+      { error: "Se requiere tipo de documento cuando se ingresa un número de documento" },
+      { status: 400 }
+    );
+  }
+
   const { data, error } = await supabase
     .from("store_config")
     .update({
@@ -25,6 +33,11 @@ export async function PUT(request: NextRequest) {
       pickup_map_url: body.pickup_map_url,
       whatsapp_message_general: body.whatsapp_message_general,
       whatsapp_message_product: body.whatsapp_message_product,
+      document_type: body.document_type || null,
+      document_number: body.document_number || null,
+      contact_email: body.contact_email || null,
+      footer_contact_text: body.footer_contact_text || null,
+      footer_show_whatsapp: body.footer_show_whatsapp ?? false,
       welcome_title: body.welcome_title,
       welcome_message: body.welcome_message,
     })
