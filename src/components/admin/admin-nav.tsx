@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Package, Settings, LogOut } from "lucide-react";
+import { Package, Settings, FileSpreadsheet, LogOut } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/admin/products", label: "Productos", icon: Package },
+  { href: "/admin/import-export", label: "Importar / Exportar", icon: FileSpreadsheet },
   { href: "/admin/config", label: "Configuración", icon: Settings },
 ];
 
