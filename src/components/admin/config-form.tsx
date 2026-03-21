@@ -32,6 +32,8 @@ export function ConfigForm({ config, welcomeImages }: ConfigFormProps) {
     footer_show_whatsapp: config.footer_show_whatsapp ?? false,
     welcome_title: config.welcome_title || "",
     welcome_message: config.welcome_message || "",
+    maintenance_mode: config.maintenance_mode ?? false,
+    maintenance_message: config.maintenance_message || "Estamos realizando mejoras. Volvemos pronto.",
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -40,6 +42,17 @@ export function ConfigForm({ config, welcomeImages }: ConfigFormProps) {
   const update = (field: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     setSuccess(false);
+  };
+
+  const handleMaintenanceToggle = () => {
+    const newValue = !formData.maintenance_mode;
+    const message = newValue
+      ? "¿Estás seguro de activar el modo mantenimiento? Los visitantes no podrán ver el catálogo."
+      : "¿Estás seguro de desactivar el modo mantenimiento? El catálogo volverá a ser visible.";
+
+    if (window.confirm(message)) {
+      update("maintenance_mode", newValue);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -78,6 +91,43 @@ export function ConfigForm({ config, welcomeImages }: ConfigFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Modo Mantenimiento */}
+      <div className={`rounded-xl border p-6 ${formData.maintenance_mode ? "bg-amber-50 border-amber-300" : "bg-white border-gray-200"}`}>
+        <div className="flex items-center justify-between mb-1">
+          <h2 className="text-lg font-semibold text-gray-800">Modo Mantenimiento</h2>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={formData.maintenance_mode}
+            onClick={handleMaintenanceToggle}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+              formData.maintenance_mode ? "bg-amber-500" : "bg-gray-300"
+            }`}
+          >
+            <span
+              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                formData.maintenance_mode ? "translate-x-6" : "translate-x-1"
+              }`}
+            />
+          </button>
+        </div>
+        <p className="text-sm text-gray-500 mb-4">
+          {formData.maintenance_mode
+            ? "El sitio está en mantenimiento. Los visitantes no pueden ver el catálogo."
+            : "El sitio está activo. Los visitantes pueden ver el catálogo normalmente."}
+        </p>
+        <div>
+          <label className={labelClass}>Mensaje de mantenimiento</label>
+          <textarea
+            value={formData.maintenance_message}
+            onChange={(e) => update("maintenance_message", e.target.value)}
+            rows={2}
+            className={inputClass}
+            placeholder="Estamos realizando mejoras. Volvemos pronto."
+          />
+        </div>
+      </div>
+
       {/* General */}
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <h2 className="text-lg font-semibold text-gray-800 mb-4">General</h2>

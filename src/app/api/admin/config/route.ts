@@ -40,6 +40,8 @@ export async function PUT(request: NextRequest) {
       footer_show_whatsapp: body.footer_show_whatsapp ?? false,
       welcome_title: body.welcome_title,
       welcome_message: body.welcome_message,
+      maintenance_mode: body.maintenance_mode ?? false,
+      maintenance_message: body.maintenance_message,
     })
     .eq("id", 1)
     .select()
