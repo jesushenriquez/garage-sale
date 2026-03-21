@@ -54,6 +54,39 @@ Se valida que los criterios de aceptación se cumplan.
 
 **Output**: Tests y/o validación manual documentada.
 
+## Cómo iniciar una feature
+
+El proceso SDD se activa cuando el usuario indica que quiere desarrollar un nuevo feature. En ese momento:
+
+1. Se define el nombre y número de la feature.
+2. Se scaffoldea la carpeta `docs/wip/{NNN}-{nombre-feature}/` con los 3 archivos template.
+3. Se inicia la Fase 1 con el proceso de descubrimiento.
+
+## Proceso de descubrimiento
+
+Antes de redactar cada spec, se debe hacer un proceso de preguntas y respuestas para entender y afinar los requerimientos. **No se escribe la spec de golpe.**
+
+### Cómo funciona
+
+1. El usuario describe la idea o feature de forma general.
+2. Claude hace preguntas específicas para clarificar alcance, casos de uso, reglas de negocio y decisiones de diseño.
+3. El usuario responde y puede agregar ideas o restricciones adicionales.
+4. Se pueden hacer varias rondas de preguntas según la complejidad.
+5. Una vez que ambos tienen claro el alcance, Claude redacta la spec completa.
+6. El usuario revisa, pide ajustes si es necesario, y aprueba.
+
+### Qué preguntar en cada fase
+
+**Fase 1 (Funcional)**: ¿Qué problema resuelve? ¿Quiénes son los usuarios? ¿Qué funcionalidades necesita? ¿Qué flujos debe soportar? ¿Qué queda fuera del alcance?
+
+**Fase 2 (Técnica)**: ¿Hay restricciones de stack? ¿Cómo se integra con lo existente? ¿Qué modelo de datos necesita? ¿Hay consideraciones de seguridad o performance?
+
+**Fase 3 (Plan)**: ¿Hay prioridades o dependencias? ¿Cuánto tiempo se quiere invertir? ¿Hay restricciones de orden?
+
+### Principio clave
+
+El objetivo es que Claude ayude al usuario a pensar y refinar la idea, no solo a documentarla. Las preguntas deben ser concretas, ofrecer opciones cuando sea útil, y evitar asumir decisiones sin validar.
+
 ## Flujo de aprobación
 
 ```
