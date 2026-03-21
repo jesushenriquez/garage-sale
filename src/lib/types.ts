@@ -49,6 +49,8 @@ export interface StoreConfig {
   footer_show_whatsapp: boolean;
   welcome_title: string | null;
   welcome_message: string | null;
+  maintenance_mode: boolean;
+  maintenance_message: string | null;
   updated_at: string;
 }
 
