@@ -3,13 +3,15 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { DELIVERY_METHODS, BANK_ACCOUNT_TYPES } from "@/lib/constants";
-import type { StoreConfig } from "@/lib/types";
+import { WelcomeImageUpload } from "@/components/admin/welcome-image-upload";
+import type { StoreConfig, WelcomeImage } from "@/lib/types";
 
 interface ConfigFormProps {
   config: StoreConfig;
+  welcomeImages: WelcomeImage[];
 }
 
-export function ConfigForm({ config }: ConfigFormProps) {
+export function ConfigForm({ config, welcomeImages }: ConfigFormProps) {
   const router = useRouter();
   const [formData, setFormData] = useState({
     store_name: config.store_name || "",
@@ -23,6 +25,8 @@ export function ConfigForm({ config }: ConfigFormProps) {
     pickup_map_url: config.pickup_map_url || "",
     whatsapp_message_general: config.whatsapp_message_general || "",
     whatsapp_message_product: config.whatsapp_message_product || "",
+    welcome_title: config.welcome_title || "",
+    welcome_message: config.welcome_message || "",
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -193,6 +197,41 @@ export function ConfigForm({ config }: ConfigFormProps) {
                 />
               </div>
             )}
+          </div>
+        </div>
+      </div>
+
+      {/* Nota de Bienvenida */}
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <h2 className="text-lg font-semibold text-gray-800 mb-1">Nota de Bienvenida</h2>
+        <p className="text-sm text-gray-500 mb-4">
+          Este mensaje aparece la primera vez que alguien visita tu tienda.
+        </p>
+        <div className="space-y-4">
+          <div>
+            <label className={labelClass}>Título</label>
+            <input
+              type="text"
+              value={formData.welcome_title}
+              onChange={(e) => update("welcome_title", e.target.value)}
+              className={inputClass}
+              placeholder="Hola, soy Vale 👋"
+              maxLength={200}
+            />
+          </div>
+          <div>
+            <label className={labelClass}>Mensaje</label>
+            <textarea
+              value={formData.welcome_message}
+              onChange={(e) => update("welcome_message", e.target.value)}
+              rows={5}
+              className={inputClass}
+              placeholder="Cuéntale a tus visitantes por qué estás vendiendo tus cosas..."
+            />
+          </div>
+          <div>
+            <label className={labelClass}>Imágenes</label>
+            <WelcomeImageUpload images={welcomeImages} />
           </div>
         </div>
       </div>

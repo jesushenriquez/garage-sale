@@ -1,20 +1,29 @@
 import { createClient } from "@/lib/supabase/server";
 import { ConfigForm } from "@/components/admin/config-form";
-import type { StoreConfig } from "@/lib/types";
+import type { StoreConfig, WelcomeImage } from "@/lib/types";
 
 export default async function ConfigPage() {
   const supabase = await createClient();
 
-  const { data: config } = await supabase
-    .from("store_config")
-    .select("*")
-    .eq("id", 1)
-    .single();
+  const [{ data: config }, { data: welcomeImages }] = await Promise.all([
+    supabase
+      .from("store_config")
+      .select("*")
+      .eq("id", 1)
+      .single(),
+    supabase
+      .from("welcome_images")
+      .select("*")
+      .order("position", { ascending: true }),
+  ]);
 
   return (
     <div>
       <h1 className="text-xl font-bold text-gray-800 mb-6">Configuración de la tienda</h1>
-      <ConfigForm config={config as StoreConfig} />
+      <ConfigForm
+        config={config as StoreConfig}
+        welcomeImages={(welcomeImages as WelcomeImage[]) || []}
+      />
     </div>
   );
 }

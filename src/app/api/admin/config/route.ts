@@ -25,6 +25,8 @@ export async function PUT(request: NextRequest) {
       pickup_map_url: body.pickup_map_url,
       whatsapp_message_general: body.whatsapp_message_general,
       whatsapp_message_product: body.whatsapp_message_product,
+      welcome_title: body.welcome_title,
+      welcome_message: body.welcome_message,
     })
     .eq("id", 1)
     .select()

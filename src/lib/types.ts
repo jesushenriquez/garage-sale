@@ -39,5 +39,15 @@ export interface StoreConfig {
   pickup_map_url: string | null;
   whatsapp_message_general: string | null;
   whatsapp_message_product: string | null;
+  welcome_title: string | null;
+  welcome_message: string | null;
   updated_at: string;
+}
+
+export interface WelcomeImage {
+  id: string;
+  storage_path: string;
+  url: string;
+  position: number;
+  created_at: string;
 }
