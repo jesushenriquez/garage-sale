@@ -45,6 +45,16 @@ Tailwind CSS 4 with a custom nude/pastel brand palette (`brand-50` through `bran
 - Types in `lib/types.ts`, enum labels in `lib/constants.ts`
 - All language is Spanish (Ecuador market, USD currency)
 
+### Spec-Driven Development (SDD)
+
+This project follows a Spec-Driven Development process. See [`docs/sdd-process.md`](docs/sdd-process.md) for the full methodology.
+
+- Features in progress: `docs/wip/{NNN}-{feature-name}/`
+- Completed features: `docs/done/{NNN}-{feature-name}/`
+- Each feature folder contains 3 specs: functional, technical, and implementation plan
+- When starting a new feature, scaffold the folder with template files (see `sdd-process.md` for templates)
+- Specs must be approved sequentially before advancing to the next phase
+
 ### Environment variables
 
 Required in `.env.local`:
