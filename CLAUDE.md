@@ -52,7 +52,7 @@ This project follows a Spec-Driven Development process. See [`docs/sdd-process.m
 - Features in progress: `docs/wip/{NNN}-{feature-name}/`
 - Completed features: `docs/done/{NNN}-{feature-name}/`
 - Each feature folder contains 3 specs: functional, technical, and implementation plan
-- When starting a new feature, scaffold the folder with template files (see `sdd-process.md` for templates)
+- When starting a new feature: validate branch → pull main → create `feature/{NNN}-{name}` branch → scaffold folder with templates
 - Specs must be approved sequentially before advancing to the next phase
 
 ### Environment variables

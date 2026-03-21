@@ -56,11 +56,25 @@ Se valida que los criterios de aceptación se cumplan.
 
 ## Cómo iniciar una feature
 
-El proceso SDD se activa cuando el usuario indica que quiere desarrollar un nuevo feature. En ese momento:
+El proceso SDD se activa cuando el usuario indica que quiere desarrollar un nuevo feature. Se siguen estos pasos en orden:
 
-1. Se define el nombre y número de la feature.
-2. Se scaffoldea la carpeta `docs/wip/{NNN}-{nombre-feature}/` con los 3 archivos template.
-3. Se inicia la Fase 1 con el proceso de descubrimiento.
+### Paso 0 — Preparar el branch
+1. Validar en qué branch estamos actualmente.
+2. Si no estamos en `main`, cambiar a `main` (o pedir confirmación si hay cambios sin commitear).
+3. Hacer `git pull origin main` para asegurarnos de tener la última versión.
+4. Preguntar al usuario cuál es el feature que quiere desarrollar (descripción general).
+5. A partir de la descripción, definir el nombre y número de la feature.
+6. Crear un nuevo branch con el patrón `feature/{NNN}-{nombre-feature}` (ej: `feature/002-busqueda-productos`).
+
+> **Nota**: La rama base es `main`. En el futuro puede cambiar a `develop` si se adopta un flujo gitflow.
+
+### Paso 1 — Scaffolding
+1. Crear la carpeta `docs/wip/{NNN}-{nombre-feature}/` con los 3 archivos template.
+2. Hacer commit inicial del scaffolding en el branch de feature.
+
+### Paso 2 — Proceso de descubrimiento
+1. Iniciar la Fase 1 (Spec Funcional) con preguntas al usuario.
+2. Seguir el flujo completo: Spec Funcional → Spec Técnica → Plan → Implementación → Pruebas.
 
 ## Proceso de descubrimiento
 
@@ -89,13 +103,21 @@ El objetivo es que Claude ayude al usuario a pensar y refinar la idea, no solo a
 
 ## Flujo de aprobación
 
+> **IMPORTANTE**: Nunca se debe avanzar a la siguiente fase sin aprobación explícita del usuario. Claude debe pedir aprobación activamente antes de continuar.
+
 ```
 Fase 1 → [Aprobación] → Fase 2 → [Aprobación] → Fase 3 → [Aprobación] → Fase 4 → Fase 5
 ```
 
-- Cada spec debe incluir **estado** (`Pendiente`, `En revisión`, `Aprobada`) y **fecha de aprobación**.
-- No se avanza a la siguiente fase sin aprobación explícita.
-- Si durante la implementación se detectan cambios necesarios, se actualiza la spec correspondiente.
+### Protocolo de aprobación
+
+1. Al terminar de redactar una spec, Claude pide aprobación explícita al usuario.
+2. El usuario puede: aprobar, pedir ajustes, o rechazar.
+3. **Al aprobar**, Claude actualiza el archivo de la spec con:
+   - `**Estado**: Aprobada`
+   - `**Fecha de aprobación**: {YYYY-MM-DD}`
+4. Solo después de actualizar el estado se puede iniciar la siguiente fase.
+5. Si durante la implementación se detectan cambios necesarios, se actualiza la spec correspondiente y se re-aprueba.
 
 ## Organización de archivos
 
