@@ -18,6 +18,8 @@ export function ProductModal({ product, config, onClose }: ProductModalProps) {
   const deliveryMethod = product.delivery_method || config.delivery_method;
   const showPickup = deliveryMethod === "pickup" || deliveryMethod === "both";
   const showDelivery = deliveryMethod === "delivery" || deliveryMethod === "both";
+  const pickupAddress = product.pickup_address || config.pickup_address;
+  const pickupMapUrl = product.pickup_map_url || config.pickup_map_url;
 
   const whatsappMessage = (config.whatsapp_message_product || "Hola, me interesa el producto: {nombre} (${precio})")
     .replace("{nombre}", product.name)
@@ -98,14 +100,14 @@ export function ProductModal({ product, config, onClose }: ProductModalProps) {
                 )}
               </div>
 
-              {showPickup && config.pickup_address && (
-                <p className="text-xs text-brand-600">{config.pickup_address}</p>
+              {showPickup && pickupAddress && (
+                <p className="text-xs text-brand-600">{pickupAddress}</p>
               )}
 
-              {showPickup && config.pickup_map_url && (
+              {showPickup && pickupMapUrl && (
                 <div className="rounded-lg overflow-hidden mt-2">
                   <iframe
-                    src={config.pickup_map_url}
+                    src={pickupMapUrl}
                     width="100%"
                     height="200"
                     style={{ border: 0 }}

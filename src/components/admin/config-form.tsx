@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { DELIVERY_METHODS, BANK_ACCOUNT_TYPES } from "@/lib/constants";
+import { DELIVERY_METHODS, BANK_ACCOUNT_TYPES, DOCUMENT_TYPES } from "@/lib/constants";
 import { WelcomeImageUpload } from "@/components/admin/welcome-image-upload";
 import type { StoreConfig, WelcomeImage } from "@/lib/types";
 
@@ -25,6 +25,11 @@ export function ConfigForm({ config, welcomeImages }: ConfigFormProps) {
     pickup_map_url: config.pickup_map_url || "",
     whatsapp_message_general: config.whatsapp_message_general || "",
     whatsapp_message_product: config.whatsapp_message_product || "",
+    document_type: config.document_type || "",
+    document_number: config.document_number || "",
+    contact_email: config.contact_email || "",
+    footer_contact_text: config.footer_contact_text || "",
+    footer_show_whatsapp: config.footer_show_whatsapp ?? false,
     welcome_title: config.welcome_title || "",
     welcome_message: config.welcome_message || "",
   });
@@ -32,7 +37,7 @@ export function ConfigForm({ config, welcomeImages }: ConfigFormProps) {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const update = (field: string, value: string) => {
+  const update = (field: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     setSuccess(false);
   };
@@ -49,6 +54,10 @@ export function ConfigForm({ config, welcomeImages }: ConfigFormProps) {
       body: JSON.stringify({
         ...formData,
         bank_account_type: formData.bank_account_type || null,
+        document_type: formData.document_type || null,
+        document_number: formData.document_number || null,
+        contact_email: formData.contact_email || null,
+        footer_contact_text: formData.footer_contact_text || null,
       }),
     });
 
@@ -98,9 +107,9 @@ export function ConfigForm({ config, welcomeImages }: ConfigFormProps) {
         </div>
       </div>
 
-      {/* Datos bancarios */}
+      {/* Datos para transferencia */}
       <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">Datos bancarios</h2>
+        <h2 className="text-lg font-semibold text-gray-800 mb-4">Datos para transferencia</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className={labelClass}>Banco</label>
@@ -142,6 +151,42 @@ export function ConfigForm({ config, welcomeImages }: ConfigFormProps) {
                 <option key={value} value={value}>{label}</option>
               ))}
             </select>
+          </div>
+          <div>
+            <label className={labelClass}>Tipo de documento</label>
+            <select
+              value={formData.document_type}
+              onChange={(e) => update("document_type", e.target.value)}
+              className={inputClass}
+            >
+              <option value="">Seleccionar...</option>
+              {Object.entries(DOCUMENT_TYPES).map(([value, label]) => (
+                <option key={value} value={value}>{label}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className={labelClass}>Número de documento</label>
+            <input
+              type="text"
+              value={formData.document_number}
+              onChange={(e) => update("document_number", e.target.value)}
+              className={inputClass}
+              placeholder="1234567890"
+            />
+            {formData.document_number && !formData.document_type && (
+              <p className="text-xs text-red-500 mt-1">Selecciona un tipo de documento</p>
+            )}
+          </div>
+          <div className="sm:col-span-2">
+            <label className={labelClass}>Correo electrónico</label>
+            <input
+              type="email"
+              value={formData.contact_email}
+              onChange={(e) => update("contact_email", e.target.value)}
+              className={inputClass}
+              placeholder="correo@ejemplo.com"
+            />
           </div>
         </div>
       </div>
@@ -232,6 +277,39 @@ export function ConfigForm({ config, welcomeImages }: ConfigFormProps) {
           <div>
             <label className={labelClass}>Imágenes</label>
             <WelcomeImageUpload images={welcomeImages} />
+          </div>
+        </div>
+      </div>
+
+      {/* Contacto en footer */}
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <h2 className="text-lg font-semibold text-gray-800 mb-1">Contacto en footer</h2>
+        <p className="text-sm text-gray-500 mb-4">
+          Texto que aparece en la sección de contacto del pie de página.
+        </p>
+        <div className="space-y-4">
+          <div>
+            <label className={labelClass}>Texto de contacto</label>
+            <textarea
+              value={formData.footer_contact_text}
+              onChange={(e) => update("footer_contact_text", e.target.value)}
+              rows={3}
+              className={inputClass}
+              placeholder="Coordinamos la entrega por WhatsApp. ¡Escríbenos!"
+            />
+            <p className="text-xs text-gray-500 mt-1">Los saltos de línea se respetan al mostrar.</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              id="footer_show_whatsapp"
+              checked={formData.footer_show_whatsapp}
+              onChange={(e) => update("footer_show_whatsapp", e.target.checked)}
+              className="h-4 w-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500"
+            />
+            <label htmlFor="footer_show_whatsapp" className="text-sm text-gray-700">
+              Mostrar botón de WhatsApp en la sección de contacto
+            </label>
           </div>
         </div>
       </div>

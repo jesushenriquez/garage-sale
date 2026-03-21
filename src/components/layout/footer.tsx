@@ -1,6 +1,7 @@
 import { Banknote, MapPin, MessageCircle } from "lucide-react";
 import type { StoreConfig } from "@/lib/types";
-import { BANK_ACCOUNT_TYPES } from "@/lib/constants";
+import { BANK_ACCOUNT_TYPES, DOCUMENT_TYPES } from "@/lib/constants";
+import { buildWhatsAppUrl } from "@/lib/utils";
 
 interface FooterProps {
   config: StoreConfig;
@@ -11,15 +12,17 @@ export function Footer({ config }: FooterProps) {
     <footer className="bg-brand-800 text-brand-100 mt-12">
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Bank info */}
-          {config.bank_name && (
+          {/* Transfer info */}
+          {(config.bank_name || config.document_type || config.contact_email) && (
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <Banknote className="w-5 h-5 text-brand-300" />
                 <h3 className="font-semibold text-white">Datos para transferencia</h3>
               </div>
               <div className="space-y-1 text-sm">
-                <p><span className="text-brand-300">Banco:</span> {config.bank_name}</p>
+                {config.bank_name && (
+                  <p><span className="text-brand-300">Banco:</span> {config.bank_name}</p>
+                )}
                 {config.bank_account_holder && (
                   <p><span className="text-brand-300">Titular:</span> {config.bank_account_holder}</p>
                 )}
@@ -28,6 +31,12 @@ export function Footer({ config }: FooterProps) {
                 )}
                 {config.bank_account_type && (
                   <p><span className="text-brand-300">Tipo:</span> {BANK_ACCOUNT_TYPES[config.bank_account_type]}</p>
+                )}
+                {config.document_type && config.document_number && (
+                  <p><span className="text-brand-300">{DOCUMENT_TYPES[config.document_type]}:</span> {config.document_number}</p>
+                )}
+                {config.contact_email && (
+                  <p><span className="text-brand-300">Correo:</span> {config.contact_email}</p>
                 )}
               </div>
             </div>
@@ -58,13 +67,28 @@ export function Footer({ config }: FooterProps) {
           )}
 
           {/* Contact info */}
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <MessageCircle className="w-5 h-5 text-brand-300" />
-              <h3 className="font-semibold text-white">Contacto</h3>
+          {(config.footer_contact_text || config.footer_show_whatsapp) && (
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <MessageCircle className="w-5 h-5 text-brand-300" />
+                <h3 className="font-semibold text-white">Contacto</h3>
+              </div>
+              {config.footer_contact_text && (
+                <p className="text-sm whitespace-pre-line">{config.footer_contact_text}</p>
+              )}
+              {config.footer_show_whatsapp && config.whatsapp_number && (
+                <a
+                  href={buildWhatsAppUrl(config.whatsapp_number, config.whatsapp_message_general || "")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 mt-3 bg-green-500 hover:bg-green-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Escríbeme por WhatsApp
+                </a>
+              )}
             </div>
-            <p className="text-sm">Coordinamos la entrega por WhatsApp</p>
-          </div>
+          )}
         </div>
 
         <div className="border-t border-brand-700 mt-8 pt-6 text-center">
