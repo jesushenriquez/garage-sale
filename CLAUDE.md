@@ -44,6 +44,7 @@ Tailwind CSS 4 with a custom nude/pastel brand palette (`brand-50` through `bran
 - The site is intentionally non-indexable (meta robots noindex + X-Robots-Tag header)
 - Types in `lib/types.ts`, enum labels in `lib/constants.ts`
 - All language is Spanish (Ecuador market, USD currency)
+- Pull requests must be created using the GitHub MCP tool, not the `gh` CLI
 
 ### Spec-Driven Development (SDD)
 
