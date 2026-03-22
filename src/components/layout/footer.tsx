@@ -2,6 +2,7 @@ import { Banknote, MapPin, MessageCircle } from "lucide-react";
 import type { StoreConfig } from "@/lib/types";
 import { BANK_ACCOUNT_TYPES, DOCUMENT_TYPES } from "@/lib/constants";
 import { buildWhatsAppUrl } from "@/lib/utils";
+import { PickupScheduleDisplay } from "@/components/catalog/pickup-schedule-display";
 
 interface FooterProps {
   config: StoreConfig;
@@ -50,6 +51,9 @@ export function Footer({ config }: FooterProps) {
                 <h3 className="font-semibold text-white">Lugar de recogida</h3>
               </div>
               <p className="text-sm mb-3">{config.pickup_address}</p>
+              {config.pickup_schedule && config.pickup_schedule.length > 0 && (
+                <PickupScheduleDisplay schedule={config.pickup_schedule} className="text-brand-200 mb-3" />
+              )}
               {config.pickup_map_url && (
                 <div className="rounded-lg overflow-hidden">
                   <iframe

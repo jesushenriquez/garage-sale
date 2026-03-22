@@ -6,6 +6,7 @@ import type { Product, StoreConfig } from "@/lib/types";
 import { formatPrice, buildWhatsAppUrl } from "@/lib/utils";
 import { ITEM_CONDITIONS, DELIVERY_METHODS } from "@/lib/constants";
 import { ImageCarousel } from "./image-carousel";
+import { PickupScheduleDisplay } from "./pickup-schedule-display";
 
 interface ProductModalProps {
   product: Product;
@@ -20,6 +21,10 @@ export function ProductModal({ product, config, onClose }: ProductModalProps) {
   const showDelivery = deliveryMethod === "delivery" || deliveryMethod === "both";
   const pickupAddress = product.pickup_address || config.pickup_address;
   const pickupMapUrl = product.pickup_map_url || config.pickup_map_url;
+  const hasCustomAddress = !!product.pickup_address;
+  const pickupSchedule = hasCustomAddress
+    ? (product.pickup_schedule ?? [])
+    : (product.pickup_schedule ?? config.pickup_schedule);
 
   const whatsappMessage = (config.whatsapp_message_product || "Hola, me interesa el producto: {nombre} (${precio})")
     .replace("{nombre}", product.name)
@@ -102,6 +107,10 @@ export function ProductModal({ product, config, onClose }: ProductModalProps) {
 
               {showPickup && pickupAddress && (
                 <p className="text-xs text-brand-600">{pickupAddress}</p>
+              )}
+
+              {showPickup && pickupSchedule.length > 0 && (
+                <PickupScheduleDisplay schedule={pickupSchedule} className="text-brand-600" />
               )}
 
               {showPickup && pickupMapUrl && (

@@ -1,3 +1,9 @@
+export interface PickupScheduleBlock {
+  days: string;
+  start_time: string;
+  end_time: string;
+}
+
 export type ItemCondition = "new" | "like_new" | "used";
 export type SaleStatus = "available" | "sold";
 export type DeliveryMethod = "delivery" | "pickup" | "both";
@@ -15,6 +21,7 @@ export interface Product {
   delivery_method: DeliveryMethod | null;
   pickup_address: string | null;
   pickup_map_url: string | null;
+  pickup_schedule: PickupScheduleBlock[] | null;
   created_at: string;
   updated_at: string;
   images?: ProductImage[];
@@ -40,6 +47,7 @@ export interface StoreConfig {
   delivery_method: DeliveryMethod;
   pickup_address: string | null;
   pickup_map_url: string | null;
+  pickup_schedule: PickupScheduleBlock[];
   whatsapp_message_general: string | null;
   whatsapp_message_product: string | null;
   document_type: DocumentType | null;

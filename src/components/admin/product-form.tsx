@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CATEGORIES, ITEM_CONDITIONS, DELIVERY_METHODS } from "@/lib/constants";
-import type { Product } from "@/lib/types";
+import type { Product, PickupScheduleBlock } from "@/lib/types";
 import { ImageUpload } from "./image-upload";
+import { PickupScheduleEditor, isScheduleValid } from "./pickup-schedule-editor";
 
 interface ProductFormProps {
   product?: Product;
@@ -22,12 +23,19 @@ export function ProductForm({ product }: ProductFormProps) {
   const [deliveryMethod, setDeliveryMethod] = useState<string>(product?.delivery_method || "");
   const [pickupAddress, setPickupAddress] = useState(product?.pickup_address || "");
   const [pickupMapUrl, setPickupMapUrl] = useState(product?.pickup_map_url || "");
+  const [pickupSchedule, setPickupSchedule] = useState<PickupScheduleBlock[]>(product?.pickup_schedule || []);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    if (!isScheduleValid(pickupSchedule)) {
+      setError("Completa todos los campos de cada horario de recogida (días, hora inicio y hora fin)");
+      return;
+    }
+
     setLoading(true);
 
     const body = {
@@ -39,6 +47,7 @@ export function ProductForm({ product }: ProductFormProps) {
       delivery_method: deliveryMethod || null,
       pickup_address: pickupAddress || null,
       pickup_map_url: pickupMapUrl || null,
+      pickup_schedule: pickupSchedule.length > 0 ? pickupSchedule : null,
       ...(isEditing ? { sale_status: product.sale_status } : {}),
     };
 
@@ -212,6 +221,16 @@ export function ProductForm({ product }: ProductFormProps) {
                   />
                 </div>
               )}
+            </div>
+            <div>
+              <label className={labelClass}>
+                Horario de recogida
+                <span className="font-normal text-gray-500"> (opcional, si no se configura se usa el de la tienda)</span>
+              </label>
+              <PickupScheduleEditor
+                value={pickupSchedule}
+                onChange={setPickupSchedule}
+              />
             </div>
           </div>
         )}

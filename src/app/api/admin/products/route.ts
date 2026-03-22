@@ -21,6 +21,9 @@ export async function POST(request: NextRequest) {
       item_condition: body.item_condition,
       sale_status: body.sale_status || "available",
       delivery_method: body.delivery_method || null,
+      pickup_address: body.pickup_address || null,
+      pickup_map_url: body.pickup_map_url || null,
+      pickup_schedule: body.pickup_schedule ?? null,
     })
     .select()
     .single();
