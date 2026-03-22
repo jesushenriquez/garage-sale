@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { DELIVERY_METHODS, BANK_ACCOUNT_TYPES, DOCUMENT_TYPES } from "@/lib/constants";
 import { WelcomeImageUpload } from "@/components/admin/welcome-image-upload";
-import type { StoreConfig, WelcomeImage } from "@/lib/types";
+import { PickupScheduleEditor, isScheduleValid } from "@/components/admin/pickup-schedule-editor";
+import type { StoreConfig, WelcomeImage, PickupScheduleBlock } from "@/lib/types";
 
 interface ConfigFormProps {
   config: StoreConfig;
@@ -23,6 +24,7 @@ export function ConfigForm({ config, welcomeImages }: ConfigFormProps) {
     delivery_method: config.delivery_method || "both",
     pickup_address: config.pickup_address || "",
     pickup_map_url: config.pickup_map_url || "",
+    pickup_schedule: config.pickup_schedule || [],
     whatsapp_message_general: config.whatsapp_message_general || "",
     whatsapp_message_product: config.whatsapp_message_product || "",
     document_type: config.document_type || "",
@@ -39,7 +41,7 @@ export function ConfigForm({ config, welcomeImages }: ConfigFormProps) {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const update = (field: string, value: string | boolean) => {
+  const update = (field: string, value: string | boolean | PickupScheduleBlock[]) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     setSuccess(false);
   };
@@ -59,6 +61,12 @@ export function ConfigForm({ config, welcomeImages }: ConfigFormProps) {
     e.preventDefault();
     setError("");
     setSuccess(false);
+
+    if (!isScheduleValid(formData.pickup_schedule)) {
+      setError("Completa todos los campos de cada horario de recogida (días, hora inicio y hora fin)");
+      return;
+    }
+
     setLoading(true);
 
     const res = await fetch("/api/admin/config", {
@@ -71,6 +79,7 @@ export function ConfigForm({ config, welcomeImages }: ConfigFormProps) {
         document_number: formData.document_number || null,
         contact_email: formData.contact_email || null,
         footer_contact_text: formData.footer_contact_text || null,
+        pickup_schedule: formData.pickup_schedule,
       }),
     });
 
@@ -292,6 +301,13 @@ export function ConfigForm({ config, welcomeImages }: ConfigFormProps) {
                 />
               </div>
             )}
+          </div>
+          <div>
+            <label className={labelClass}>Horario de recogida</label>
+            <PickupScheduleEditor
+              value={formData.pickup_schedule}
+              onChange={(blocks) => update("pickup_schedule", blocks)}
+            />
           </div>
         </div>
       </div>

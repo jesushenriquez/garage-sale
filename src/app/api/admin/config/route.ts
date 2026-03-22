@@ -31,6 +31,7 @@ export async function PUT(request: NextRequest) {
       delivery_method: body.delivery_method,
       pickup_address: body.pickup_address,
       pickup_map_url: body.pickup_map_url,
+      pickup_schedule: body.pickup_schedule ?? [],
       whatsapp_message_general: body.whatsapp_message_general,
       whatsapp_message_product: body.whatsapp_message_product,
       document_type: body.document_type || null,

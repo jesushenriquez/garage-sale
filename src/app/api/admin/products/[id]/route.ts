@@ -27,6 +27,7 @@ export async function PUT(
       delivery_method: body.delivery_method || null,
       pickup_address: body.pickup_address || null,
       pickup_map_url: body.pickup_map_url || null,
+      pickup_schedule: body.pickup_schedule ?? null,
     })
     .eq("id", id)
     .select()
